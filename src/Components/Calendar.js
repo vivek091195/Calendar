@@ -11,15 +11,28 @@ import {
 } from './../constants';
 
 const Calendar = () => {
-  const { date, month, year, isLeapYear } = useCalendarContext();
+  const {
+    date,
+    month,
+    year,
+    isLeapYear,
+    startDay,
+    prevClickHandler,
+    nextClickHandler,
+  } = useCalendarContext();
   const daysArray = isLeapYear ? DAYS_LEAP_YEAR_ENUM : DAYS_NON_LEAP_YEAR_ENUM;
   return (
     <CalendarWrapper>
-      <NavigationPanel currentMonth={MONTHS[month]} currentYear={year} />
+      <NavigationPanel
+        currentMonth={MONTHS[month]}
+        currentYear={year}
+        prevClickHandler={prevClickHandler}
+        nextClickHandler={nextClickHandler}
+      />
 
       <DaysPanel />
 
-      <DatesPanel days={daysArray[month]} />
+      <DatesPanel days={daysArray[month]} startDay={startDay} />
     </CalendarWrapper>
   );
 };

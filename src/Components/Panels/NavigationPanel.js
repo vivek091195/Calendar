@@ -7,14 +7,19 @@ import {
   MonthWrapper,
 } from './NavigationPanel.style';
 
-const NavigationPanel = ({ currentMonth, currentYear }) => {
+const NavigationPanel = ({
+  currentMonth,
+  currentYear,
+  prevClickHandler,
+  nextClickHandler,
+}) => {
   return (
     <NavigationPanelWrapper>
-      <Marker>
+      <Marker onClick={prevClickHandler}>
         <ChevronLeftIcon />
       </Marker>
       <MonthWrapper>{`${currentMonth} ${currentYear}`}</MonthWrapper>
-      <Marker>
+      <Marker onClick={nextClickHandler}>
         <ChevronRightIcon />
       </Marker>
     </NavigationPanelWrapper>

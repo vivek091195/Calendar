@@ -1,11 +1,18 @@
 import { useEffect, useState } from 'react';
 import constate from 'constate';
+import { DAYS_LEAP_YEAR_ENUM, DAYS_NON_LEAP_YEAR_ENUM } from '../constants';
 
 const checkIfLeapYear = (year) =>
-  year % 4 === 0 && year % 400 === 0 && year % 100 !== 0;
+  (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 
 const fetchMonthStartingDay = (currentDate) => {
   return new Date(currentDate.getYear(), currentDate.getMonth(), 1).getDay();
+};
+
+const fetchNoOfDays = (month, isLeapYear = false) => {
+  return isLeapYear
+    ? DAYS_LEAP_YEAR_ENUM[month]
+    : DAYS_NON_LEAP_YEAR_ENUM[month];
 };
 
 const useCalendar = () => {
@@ -15,11 +22,19 @@ const useCalendar = () => {
   const [year, setYear] = useState(currentDate.getFullYear());
   const [isLeapYear, setIsLeapYear] = useState(false);
   const [startDay, setStartDay] = useState('');
+  const [prevMonthDays, setPrevMonthDays] = useState(0);
+
+  const fetchPreviousMonthDays = (currentMonth) => {
+    return currentMonth
+      ? fetchNoOfDays(currentMonth - 1, isLeapYear)
+      : fetchNoOfDays(11, checkIfLeapYear(year - 1));
+  };
 
   const setDateDetails = (date) => {
     setDate(date.getDate());
     setMonth(date.getMonth());
     setYear(date.getFullYear());
+    setPrevMonthDays(fetchPreviousMonthDays(date.getMonth()));
     setIsLeapYear(checkIfLeapYear(year));
     setStartDay(fetchMonthStartingDay(date));
   };
@@ -57,6 +72,7 @@ const useCalendar = () => {
     year,
     isLeapYear,
     startDay,
+    prevMonthDays,
     setStartDay,
     prevClickHandler,
     nextClickHandler,

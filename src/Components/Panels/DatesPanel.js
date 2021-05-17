@@ -2,26 +2,27 @@ import React from 'react';
 import Date from '../Date';
 import { DatesPanelWrapper } from './DatesPanel.style';
 import PropTypes from 'prop-types';
-import { NUMBER_OF_DAYS_IN_WEEK } from '../../constants';
+import { useDate } from '../../Hooks/useDate';
 
-const DatesPanel = ({ days, startDay }) => {
-  let dates = Array(days + startDay + 1)
-    .fill(null)
-    .map((_, i) => {
-      const date = i - startDay;
-      return date <= 0 ? null : date;
-    });
+const DatesPanel = ({
+  currMonthDays,
+  prevMonthDays,
+  startDay,
+  showPreviousMonthDates,
+}) => {
+  const { fetchCalendarMonthDates } = useDate();
 
-  // If null entries are 7, then filter them
-  const nullEntries = dates.length - dates.filter(Number).length;
-  if (nullEntries === NUMBER_OF_DAYS_IN_WEEK) {
-    dates = [...dates].filter(Number);
-  }
+  const { dates, activeDateArray } = fetchCalendarMonthDates({
+    currMonthDays,
+    prevMonthDays,
+    startDay,
+    showPreviousMonthDates,
+  });
 
   return (
     <DatesPanelWrapper>
-      {dates.map((date, index) => (
-        <Date index={index} date={date} />
+      {dates?.map((date, index) => (
+        <Date index={index} date={date} active={activeDateArray[index]} />
       ))}
     </DatesPanelWrapper>
   );
@@ -30,6 +31,8 @@ const DatesPanel = ({ days, startDay }) => {
 DatesPanel.propTypes = {
   days: PropTypes.number,
   startDay: PropTypes.number,
+  currentMonth: PropTypes.number,
+  currentYear: PropTypes.number,
 };
 
 DatesPanel.defaultProps = {

@@ -9,17 +9,20 @@ import {
   DAYS_NON_LEAP_YEAR_ENUM,
   MONTHS,
 } from './../constants';
+import PropTypes from 'prop-types';
 
-const Calendar = () => {
+const Calendar = ({ showPreviousMonthDates }) => {
   const {
     date,
     month,
     year,
     isLeapYear,
     startDay,
+    prevMonthDays,
     prevClickHandler,
     nextClickHandler,
   } = useCalendarContext();
+
   const daysArray = isLeapYear ? DAYS_LEAP_YEAR_ENUM : DAYS_NON_LEAP_YEAR_ENUM;
   return (
     <CalendarWrapper>
@@ -32,9 +35,22 @@ const Calendar = () => {
 
       <DaysPanel />
 
-      <DatesPanel days={daysArray[month]} startDay={startDay} />
+      <DatesPanel
+        currMonthDays={daysArray[month]}
+        prevMonthDays={prevMonthDays}
+        startDay={startDay}
+        showPreviousMonthDates={showPreviousMonthDates}
+      />
     </CalendarWrapper>
   );
+};
+
+Calendar.propTypes = {
+  showPreviousMonthDates: PropTypes.bool,
+};
+
+Calendar.defaultProps = {
+  showPreviousMonthDates: false,
 };
 
 export default Calendar;

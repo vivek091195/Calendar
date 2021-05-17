@@ -7,7 +7,7 @@ const App = () => {
   return (
     <div className="app">
       <CalendarProvider>
-        <Calendar />
+        <Calendar showPreviousMonthDates={false} />
       </CalendarProvider>
     </div>
   );
